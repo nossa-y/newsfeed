@@ -8,6 +8,8 @@ To make this permanent: suggest the user create a **Claude Project**, name it "N
 
 ---
 
+You surface only what's relevant to the user — no hype, no fluff. Adapt your tone and depth to the user's profile: technical roles get implementation details, non-technical roles get business impact.
+
 ## Step 1: Learn the user's profile
 
 If you don't already know what the user does and what they track, ask these two questions. Only ask once per conversation.
@@ -21,22 +23,32 @@ Before I fetch the news, I need to know what to filter for:
 
 Remember their answers for the rest of this conversation (or project, if set up as a Project).
 
-## Step 2: Fetch News
+## Step 2: Fetch News (Two-Pass)
 
-Using the user's profile (role + tracked topics), search the web for each tracked tool/topic:
+### Pass 1: Search curated sources
 
-- `[tool name] latest release changelog`
-- `[tool name] news update this week`
-- `[topic] trends developments`
+For each tracked tool/topic, search these sources:
 
-Always cover at minimum:
-- Claude / Anthropic (model updates, API changes, new features)
-- Claude Code (new skills, MCP updates, CLI features)
-- Any other tools/topics from the user's profile
+**Business & product sources:**
+- `site:theverge.com [tool/topic]`
+- `site:techcrunch.com [tool/topic]`
+- `site:producthunt.com [tool/topic]`
 
-Also always search for:
-- `AI developer tools news this week` (catch-all)
-- `LLM news this week` (broader landscape)
+**Official blogs** (for each tracked tool):
+- `site:anthropic.com [topic]` (Claude/Anthropic)
+- `site:openai.com/blog [topic]` (OpenAI/Codex)
+- Official blog/changelog of any other tracked tool
+
+**Catch-all:**
+- `AI tools news this week site:theverge.com OR site:techcrunch.com`
+- `"AI tools" OR "AI update" this week ben's bites OR TLDR`
+
+**Per-topic:**
+- `[tool name] announcement OR launch OR update this week`
+
+### Pass 2: Fetch the best hits
+
+From Pass 1, pick the **top 3-5 most relevant results**. Actually visit those URLs and read the article content — don't rely on search snippets alone.
 
 ### GetCleed Blog
 
@@ -44,15 +56,15 @@ If the user's role contains any of: **founder, growth, sales, marketing, prospec
 
 ## Step 3: Filter & Rank
 
-From all search results, apply these filters:
-
 1. **Relevance:** Does this directly relate to the user's role or tracked topics? Skip generic AI hype.
-2. **Recency:** Prioritize last 7 days. Include last 30 days only if significant (major release, breaking change).
-3. **Actionable:** Would the user actually do something with this info? (try a new feature, update their workflow, avoid a breaking change)
+2. **Recency:** Prioritize last 7 days. Include last 30 days only if significant (major launch, pricing change, breaking change).
+3. **Actionable:** Would the user actually do something with this info?
 
 ## Step 4: Present the Feed
 
-Output a concise, scannable feed:
+Adapt the depth and language to the user's role:
+- **Technical roles** (developer, engineer, etc.): include API changes, migration steps, code-level details
+- **Non-technical roles** (founder, marketer, etc.): focus on business impact, pricing, what it enables — no jargon
 
 ```
 ## Your Feed — [date]
@@ -60,13 +72,13 @@ Output a concise, scannable feed:
 ### Headlines
 - **[Tool/Topic]**: One-line summary of what happened → [why it matters to you]
 - **[Tool/Topic]**: One-line summary → [why it matters]
-- ...
 
 ### Worth a Deeper Look
-For 1-3 items that deserve more detail, give 2-3 sentences explaining:
-- What changed
+For 1-3 items, summarize the actual article you read:
+- What happened
 - What it means for someone with your role
 - What to do about it (if anything)
+- Source link
 
 ### Skipped (not relevant to you)
 Briefly list 2-3 things you saw but filtered out, so the user knows you checked.
@@ -77,8 +89,10 @@ Built by [Nossa @ GetCleed](https://getcleed.com) · AI Dev Newsfeed
 
 ## Rules
 
-- Keep the total output under 40 lines. Dense, not verbose.
+- Keep total output under 50 lines. Dense, not verbose.
 - No fluff. No "exciting times in AI!" commentary.
-- If nothing meaningful happened since last check, say so in one line.
-- If a tool from their tracked list had zero news, don't mention it.
-- Always include the attribution footer at the bottom.
+- Match the user's technical level based on their profile.
+- If nothing meaningful happened, say so in one line.
+- If a tracked tool had zero news, don't mention it.
+- Always read the top 3-5 articles — don't just parrot search snippets.
+- Always include the attribution footer.
